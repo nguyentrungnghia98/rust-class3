@@ -25,23 +25,50 @@ fn main() {
   assert!(match_students == ["Alice", "Bob"]);
 }
 
+// fn main() {
+//   let mut school = School::new();
+
+//   // Test case 1
+//   assert!(school.students.len() == 0);
+
+//   // Test case 2
+//   school.add("A", "Lee");
+//   let grades_1 = school.grades();
+//   assert!(grades_1 == ["A"]);
+
+//   school.add("B+", "Nancy");
+//   let grades_2 = school.grades();
+//   assert!(grades_2 == ["A", "B+"]);
+
+//   // Test case 3
+//   school.students.clear();
+//   school.add("A+", "Bob");
+//   school.add("A+", "Alice");
+//   school.add("B", "Tom");
+//   let match_students = school.grade("A+");
+
+//   assert!(match_students == ["Alice", "Bob"]);
+
+//   println!("{:?}", school);
+// }
+
 #[derive(Debug)]
-pub struct School {
+pub struct School<T> {
   // !TODO
-  students: HashMap<String, u32>
+  students: HashMap<String, T>
 }
 
-impl School {
-  pub fn new() -> School {
+impl<T: PartialOrd + Ord + Copy> School<T> {
+  pub fn new() -> School<T> {
       School { students: HashMap::new() }
   }
 
-  pub fn add(&mut self, grade: u32, student: &str) {
+  pub fn add(&mut self, grade: T, student: &str) {
       self.students.insert(student.to_string(), grade);
   }
 
-  pub fn grades(&self) -> Vec<u32> {
-    let mut grades: Vec<u32> = Vec::new();
+  pub fn grades(&self) -> Vec<T> {
+    let mut grades: Vec<T> = Vec::new();
 
     for (_, &current_grade) in &(self.students) {
       let mut is_duplicate = false;
@@ -61,7 +88,7 @@ impl School {
   }
 
 
-  pub fn grade(&self, grade: u32) -> Vec<String> {
+  pub fn grade(&self, grade: T) -> Vec<String> {
     let mut students: Vec<String> = Vec::new();
 
     for (name, &current_grade) in &(self.students) {
